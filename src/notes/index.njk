@@ -1,0 +1,24 @@
+---
+title: 日记
+layout: layouts/base.njk
+---
+<h1 style="margin:16px 0">日记</h1>
+
+<ul class="card-grid">
+{% for p in collections.all | sort(attribute='date') | reverse %}
+  {% if p.url and p.url.startsWith('/notes/') and p.fileSlug != 'index' %}
+  <li class="card">
+    <a class="card-link" href="{{ p.url }}">
+      {% if p.data.cover %}
+        <img class="card-cover" src="{{ p.data.cover }}" alt="" loading="lazy" decoding="async">
+      {% endif %}
+      <div class="card-body">
+        <h3 class="card-title">{{ p.data.title or '未命名' }}</h3>
+        {% if p.data.summary %}<p class="card-summary">{{ p.data.summary }}</p>{% endif %}
+        <small class="card-date">{{ p.date | fmtDate }}</small>
+      </div>
+    </a>
+  </li>
+  {% endif %}
+{% endfor %}
+</ul>

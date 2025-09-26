@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>{{ title or "My Studio" }}</title>
+  <link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+  <nav class="navbar">
+  
+    <!-- 头像=首页 -->
+    <a href="/" id="navlogo" aria-label="首页">
+     <img src="/assets/Pics/Ellipse 1.png" alt="Logo">
+  </a>
+
+  <!-- 四个总览页 -->
+  <ul class="nav-list" role="navigation" aria-label="主导航">
+    <li><a class="navlink" href="/zhi/">知</a></li>
+    <li><a class="navlink" href="/xing/">行</a></li>
+    <li><a class="navlink" href="/he/">合</a></li>
+    <li><a class="navlink" href="/yi/">一</a></li>
+  </ul>
+</nav>
+
+  <main class="page-wrap">
+    {{ content | safe }}
+  </main>
+
+  <footer class="page-wrap">© 2025 Your Name</footer>
+</body>
+</html>
