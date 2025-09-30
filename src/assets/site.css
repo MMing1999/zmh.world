@@ -1,6 +1,12 @@
-/* ========== 全局基础 ========== */
+/* =========================================
+   site.css — 全局基础样式
+   * 作用范围：全站通用
+   * 页面/模块样式请在 pageCSS 中引入单独文件
+   ========================================= */
 
-/* 自定义字体导入（Fusion Pixel 12px Monospaced zh_hans） */
+/* ---------- 0) 字体与基础 ---------- */
+
+/* 自定义字体（Fusion Pixel） */
 @font-face {
   font-family: 'Fusion Pixel';
   src: url('/assets/Fonts/fusion-pixel-12px-monospaced-zh_hans.otf') format('opentype');
@@ -9,8 +15,15 @@
   font-display: swap;
 }
 
-* { box-sizing: border-box; }
-html, body { margin: 0; padding: 0; }
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
 body {
   font-family: 'Fusion Pixel', Arial, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   line-height: 1.6;
@@ -18,35 +31,84 @@ body {
   color: #000;
 }
 
-main.page-wrap,
-footer.page-wrap {
-  max-width: 1000px;
-  margin: 24px auto;
-  padding: 0 16px;
-}
-
-/* ========== 排版系统 ========== */
-
+/* 全局排版 */
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Fusion Pixel', sans-serif;
   margin: 1.2em 0 0.6em;
   line-height: 1.3;
 }
-
 h1 { font-size: 40px; }
 h2 { font-size: 28px; }
 h3 { font-size: 22px; }
 
-p { margin: 16px 0; line-height: 1.8; }
+p {
+  margin: 16px 0;
+  line-height: 1.8;
+}
 
-/* ========== 顶部导航（头像=首页 + 四大栏目） ========== */
+/* 全局图片自适应 */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
 
-:root { --nav-h: 80px; }
+/* ===== 回到顶部按钮样式 ===== */
+.back-to-top {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 50%;
+  background: #000;
+  color: #fff;
+  font-size: 22px;
+  line-height: 44px;
+  text-align: center;
+  font-family: 'Fusion Pixel', Arial, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s ease;
+  box-shadow: 0 6px 16px rgba(0,0,0,.18);
+  cursor: pointer;
+  z-index: 999;
+}
+.back-to-top:hover { opacity: .9; }
+.back-to-top.is-visible { opacity: 1; pointer-events: auto; }
+
+/* 页面容器（正文/页脚宽度由各页面单独设定） */
+main.page-wrap {
+  margin: 24px auto;
+  padding: 0 16px;
+}
+footer.page-wrap {
+  margin: 24px auto;
+  padding: 0 16px;
+  opacity: .9;
+  font-size: 14px;
+  text-align: center;
+}
+
+/* ---------- 1) 顶部导航（Navbar） ---------- */
+
+:root {
+  --nav-h: 80px;
+}
 
 .navbar {
-  position: sticky; top: 0; z-index: 10;
-  display: flex; align-items: center; justify-content: space-between;
-  height: var(--nav-h); width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--nav-h);
+  width: 100%;
 
   /* 背景图：居中，自适应铺满 */
   background-image: url('/assets/Pics/Frame12.png');
@@ -57,7 +119,7 @@ p { margin: 16px 0; line-height: 1.8; }
   backdrop-filter: saturate(1.05);
 }
 
-/* 头像 Logo = 圆形背景图 */
+/* 头像 Logo */
 #navlogo {
   display: block;
   margin-left: 20px;
@@ -67,20 +129,25 @@ p { margin: 16px 0; line-height: 1.8; }
   border-radius: 50%;
   background: url('/assets/Pics/Ellipse 1.png') lightgray 50% / cover no-repeat;
 }
-#navlogo img { display: none; } /* 隐藏原始 <img> */
+#navlogo img {
+  display: none; /* 隐藏原始 <img> */
+}
 
+/* 导航链接 */
 .nav-list {
-  list-style: none; margin: 0; padding: 0 40px 0 0;
-  display: flex; gap: 28px; align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0 40px 0 0;
+  display: flex;
+  gap: 28px;
+  align-items: center;
 }
 .navlink {
   color: #000;
   text-align: center;
   font-family: 'Fusion Pixel', sans-serif;
   font-size: 32px;
-  font-style: normal;
   font-weight: 400;
-  line-height: normal;
   text-decoration: none;
 }
 .navlink:hover {
@@ -104,41 +171,10 @@ body[data-section="yi"]  .navlink[href="/yi/"] {
   .navlink { font-size: 24px; }
 }
 
-/* ========== 详情页排版 ========== */
-
-.entry { max-width: 800px; margin: 24px auto; padding: 0 16px; }
-.entry-head { margin-bottom: 16px; }
-.entry-title { font-size: 40px; line-height: 1.2; margin: 0 0 8px; }
-.entry-meta { opacity: .6; margin: 0 0 8px; }
-.entry-summary { opacity: .85; margin: 0 0 12px; }
-.entry-cover {
-  width: 100%; display: block; border-radius: 12px;
-  margin: 12px 0 16px; object-fit: cover;
-}
-.entry-body img { max-width: 100%; height: auto; border-radius: 8px; }
-.entry-body h2 { margin-top: 28px; }
-
-/* ========== 列表卡片（notes/works） ========== */
-
-.card-grid {
-  list-style: none; margin: 16px 0 0; padding: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 16px;
-}
-.card {
-  border: 1px solid #e5e5e5; background: #fff;
-  border-radius: 14px; overflow: hidden;
-  transition: transform .18s ease, box-shadow .18s ease;
-}
-.card:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,.08); }
-@media (prefers-reduced-motion: reduce) {
-  .card { transition: none; }
-  .card:hover { transform: none; box-shadow: none; }
-}
-.card-link { color: inherit; text-decoration: none; display: block; height: 100%; }
-.card-cover { width: 100%; display: block; aspect-ratio: 16/9; object-fit: cover; }
-.card-body { padding: 12px 14px; }
-.card-title { margin: 0 0 6px 0; font-size: 18px; line-height: 1.35; }
-.card-summary { margin: 0 0 8px 0; opacity: .85; }
-.card-date { opacity: .6; }
+/* =========================================
+   提示：
+   - 各分类页/详情页额外样式：
+     /assets/Css/xing.css
+     /assets/Css/project.css
+   - site.css 只管全局
+   ========================================= */

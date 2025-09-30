@@ -1,0 +1,244 @@
+---
+title: 行 · Doing
+layout: layouts/base.njk
+section: xing
+pageCSS: '/assets/css/xing.css'
+
+---
+
+{# ===============================
+   ① HERO：满屏出血 + 高度 700 + 裁切填充
+   =============================== #}
+<section class="xing-hero">
+  <div class="inner">
+    <div class="slides" id="xingSlides">
+      {# slide 1 #}
+      <a class="slide is-active" href="https://example-portfolio-1.com" target="_blank" rel="noopener">
+        <img src="{{ '/assets/Pics/xing-portfolo-01-temp.jpg' | url }}" alt="Portfolio 1">
+        <div class="caption">
+          <h2>Portfolio 1</h2>
+          <p>作品集描述：一句话概述/主打亮点。这里会链接到更炫的外部 portfolio 站。</p>
+        </div>
+      </a>
+
+      {# slide 2 #}
+      <a class="slide" href="https://example-portfolio-2.com" target="_blank" rel="noopener">
+        <img src="{{ '/assets/Pics/xing-portfolo-02-temp.jpg' | url }}" alt="Portfolio 2">
+        <div class="caption">
+          <h2>Portfolio 2</h2>
+          <p>第二组封面与描述（点击底部条切换）。</p>
+        </div>
+      </a>
+
+      {# slide 3 #}
+      <a class="slide" href="https://example-portfolio-3.com" target="_blank" rel="noopener">
+        <img src="{{ '/assets/Pics/xing-portfolo-03-temp.jpg' | url }}" alt="Portfolio 3">
+        <div class="caption">
+          <h2>Portfolio 3</h2>
+          <p>第三组封面与描述。</p>
+        </div>
+      </a>
+    </div>
+
+    {# 切换按钮 #}
+    <div class="controls" id="xingControls" aria-label="切换作品封面">
+      <button class="dot is-active" aria-label="封面 1"></button>
+      <button class="dot" aria-label="封面 2"></button>
+      <button class="dot" aria-label="封面 3"></button>
+    </div>
+  </div>
+</section>
+
+{# ===============================
+   ② Intro 灰条
+   =============================== #}
+<section class="xing-intro">
+  <div class="wrap">
+    <h1>行 · Doing</h1>
+    <p>这里展示一些真实或虚构项目的记录。下面是分组标签（TagBar）与项目卡片画廊。</p>
+  </div>
+</section>
+
+{# ===============================
+   ③ 标题（居中）
+   =============================== #}
+<section class="xing-title">
+  <h2>行动库</h2>
+</section>
+
+{# ===============================
+   ④ 搜索框（居中）
+   =============================== #}
+<section class="xing-searchbar">
+  <input id="xingSearch" type="search" placeholder="搜索项目…">
+</section>
+
+{# ===============================
+   ⑤ 分类 TagBar（居中）
+   =============================== #}
+<section class="xing-filter" aria-label="分类切换">
+  {% set keys = [
+    {key:"all",     label:"全部"},
+    {key:"design",  label:"设计"},
+    {key:"art",     label:"艺术"},
+    {key:"dev",     label:"开发"},
+    {key:"product", label:"产品"},
+    {key:"startup", label:"创业"}
+  ] %}
+  <ul class="xing-filter__list">
+    {% for k in keys %}
+      <li>
+        <button
+          class="xing-filter__btn{% if k.key == 'all' %} is-active{% endif %}"
+          data-key="{{ k.key }}"
+          type="button"
+        >{{ k.label }}</button>
+      </li>
+    {% endfor %}
+  </ul>
+</section>
+
+{# ===============================
+   ⑥ 项目卡片画廊（全部渲染，前端过滤）
+   - 数据来源：collections.xing_all（在 .eleventy.js 里已定义）
+   - 显示策略：
+     · 封面：优先使用 front-matter 的 cover；没有就用默认图
+     · 徽章：设计/艺术/开发/产品/创业（按优先级取第一个匹配）
+   =============================== #}
+{% set all = collections.xing_all or [] %}
+<ul class="xing-card-grid" id="xingGallery">
+  {% for p in all %}
+    {% set cats = p.data.categories or [] %}
+
+    {# 计算徽章（优先级） #}
+    {% set badge = "其他" %}
+    {% if 'design'  in cats %}{% set badge = "设计"  %}
+    {% elif 'art'   in cats %}{% set badge = "艺术"  %}
+    {% elif 'dev'   in cats %}{% set badge = "开发"  %}
+    {% elif 'product' in cats %}{% set badge = "产品"  %}
+    {% elif 'startup' in cats %}{% set badge = "创业"  %}{% endif %}
+
+    <li class="xing-card"
+        data-cats="{{ cats | join(',') }}"
+        data-date="{{ p.date | fmtDate }}">
+      <a class="xing-card__link" href="{{ p.url }}">
+
+        {# —— 封面：容器（固定比例），图片绝对定位铺满 —— #}
+        {% set coverSrc = p.data.cover %}
+        <div class="xing-card__media">
+          <img class="xing-card__cover"
+               src="{{ (coverSrc or '/assets/Pics/xing-portfolo-01-temp.jpg') | url }}"
+               alt="">
+        </div>
+
+        {# —— 文案区 —— #}
+        <div class="xing-card__body">
+          {# 标题 #}
+          <h4 class="xing-card__title">{{ p.data.title }}</h4>
+
+          {# 摘要（可选） #}
+          {% if p.data.summary %}
+            <p class="xing-card__summary">{{ p.data.summary }}</p>
+          {% endif %}
+
+          {# 标签（最多 4 个） #}
+          {% if p.data.tags %}
+            <div class="xing-card__tags">
+              {% for t in p.data.tags %}
+                <span class="xing-card__tag">#{{ t }}</span>
+              {% endfor %}
+            </div>
+          {% endif %}
+
+          {# --- 卡片底部：时间 + 多分类徽章 --- #}
+          <div class="xing-card__footer">
+            <time>{{ p.date | fmtDate }}</time>
+
+            <div class="xing-card__cats">
+              {# 如果 categories 为空就不渲染 #}
+              {% for c in (p.data.categories or []) %}
+                {% set key = (c | lower) %}
+                {% set label = c %}
+                {% if key == 'design'  %}{% set label = '设计'  %}{% endif %}
+                {% if key == 'art'     %}{% set label = '艺术'  %}{% endif %}
+                {% if key == 'dev'     %}{% set label = '开发'  %}{% endif %}
+                {% if key == 'product' %}{% set label = '产品'  %}{% endif %}
+                {% if key == 'startup' %}{% set label = '创业'  %}{% endif %}
+                <span class="badge badge--cat">{{ label }}</span>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </a>
+    </li>
+  {% endfor %}
+</ul>
+
+{# ===============================
+   ⑦ 交互脚本
+   - Tag 过滤：点击切换类别
+   - 搜索：按标题/摘要/标签的可见文本过滤
+   - 默认显示：全部 + 空搜索
+   =============================== #}
+<script>
+  (function () {
+    const btns   = document.querySelectorAll('.xing-filter__btn');
+    const list   = document.getElementById('xingGallery');
+    const cards  = Array.from(list.querySelectorAll('.xing-card'));
+    const search = document.getElementById('xingSearch');
+
+    let currentKey = 'all';
+
+    // 是否匹配某个卡片
+    function matchCard(li, key, q) {
+      const cats = (li.dataset.cats || '').split(',').filter(Boolean);
+      const byCat = key === 'all' || cats.includes(key);
+      if (!q) return byCat;
+      const text = li.innerText.toLowerCase();
+      return byCat && text.includes(q.toLowerCase());
+    }
+
+    // 应用过滤
+    function apply() {
+      const q = (search && search.value || '').trim();
+      cards.forEach(li => {
+        li.style.display = matchCard(li, currentKey, q) ? '' : 'none';
+      });
+    }
+
+    // 绑定 tag 切换
+    btns.forEach(b => b.addEventListener('click', () => {
+      currentKey = b.dataset.key;
+      btns.forEach(x => x.classList.toggle('is-active', x === b));
+      apply();
+    }));
+
+    // 绑定搜索
+    if (search) search.addEventListener('input', apply);
+
+    // 初始：显示全部
+    apply();
+  })();
+</script>
+
+{# ===============================
+   ⑧（可选）HERO 的小脚本：点击底部 dot 切换
+   =============================== #}
+<script>
+  (function () {
+    const slides = Array.from(document.querySelectorAll('#xingSlides .slide'));
+    const dots   = Array.from(document.querySelectorAll('#xingControls .dot'));
+    if (!slides.length || !dots.length) return;
+
+    let i = 0;
+    function go(n){
+      i = n;
+      slides.forEach((s,idx)=> s.classList.toggle('is-active', idx===i));
+      dots.forEach((d,idx)=> d.classList.toggle('is-active', idx===i));
+    }
+    dots.forEach((d,idx)=> d.addEventListener('click', ()=> go(idx)));
+
+    // 如需自动轮播，取消下一行注释
+    // setInterval(()=> go((i+1)%slides.length), 5000);
+  })();
+</script>

@@ -3,31 +3,116 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>{{ title or "My Studio" }}</title>
-  <link rel="stylesheet" href="/assets/site.css">
+
+  {# ===== 标题（优先页面标题，后缀站点名） ===== #}
+  {% if title %}
+    {% set _title = title ~ ' · My Studio' %}
+  {% else %}
+    {% set _title = 'My Studio' %}
+  {% endif %}
+  <title>{{ _title }}</title>
+
+  {# ===== 可选描述 / OG（复用 summary） ===== #}
+  {% if summary %}
+    {% set _desc = summary | striptags | trim | truncate(160, true, '…') %}
+    <meta name="description" content="{{ _desc }}">
+    <meta property="og:description" content="{{ _desc }}">
+  {% endif %}
+  <meta property="og:title" content="{{ title or 'My Studio' }}">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{{ (page.url or '/') | url }}">
+  <link rel="canonical" href="{{ (page.url or '/') | url }}">
+  <meta name="theme-color" content="#ffffff">
+
+  {# ===== 页面级样式（优先加载，确保优先级）===== #}
+  {% if pageCSS %}
+    {% if pageCSS.push %} {# array #}
+      {% for href in pageCSS %}
+        <link rel="stylesheet" href="{{ href | url }}">
+      {% endfor %}
+    {% else %} {# string #}
+      <link rel="stylesheet" href="{{ pageCSS | url }}">
+    {% endif %}
+  {% endif %}
+
+  {# ===== 全局样式（统一入口）===== #}
+  <link rel="stylesheet" href="{{ '/assets/site.css' | url }}">
+
+  {# ===== Favicon（按需更换路径）===== #}
+  <link rel="icon" href="{{ '/assets/favicon.ico' | url }}">
 </head>
-<body>
 
-  <nav class="navbar">
-  
-    <!-- 头像=首页 -->
-    <a href="/" id="navlogo" aria-label="首页">
-     <img src="/assets/Pics/Ellipse 1.png" alt="Logo">
-  </a>
+<body
+  data-section="{{ section or 'home' }}"
+  data-page="{{ page.fileSlug }}"
+>
+  {# ===== 顶部导航 ===== #}
+  <nav class="navbar" role="navigation" aria-label="主导航">
+    <a href="{{ '/' | url }}" id="navlogo" aria-label="首页">
+      <img src="{{ '/assets/Pics/Ellipse 1.png' | url }}" alt="Logo">
+    </a>
+    <ul class="nav-list">
+      <li><a class="navlink" href="{{ '/zhi/'  | url }}">知</a></li>
+      <li><a class="navlink" href="{{ '/xing/' | url }}">行</a></li>
+      <li><a class="navlink" href="{{ '/he/'   | url }}">合</a></li>
+      <li><a class="navlink" href="{{ '/yi/'   | url }}">一</a></li>
+    </ul>
+  </nav>
 
-  <!-- 四个总览页 -->
-  <ul class="nav-list" role="navigation" aria-label="主导航">
-    <li><a class="navlink" href="/zhi/">知</a></li>
-    <li><a class="navlink" href="/xing/">行</a></li>
-    <li><a class="navlink" href="/he/">合</a></li>
-    <li><a class="navlink" href="/yi/">一</a></li>
-  </ul>
-</nav>
-
-  <main class="page-wrap">
+  {# ===== 页面主体 ===== #}
+  <main id="main" class="page-wrap">
     {{ content | safe }}
   </main>
 
-  <footer class="page-wrap">© 2025 Your Name</footer>
+  {# ===== 页脚 ===== #}
+  <footer class="page-wrap">© 2025 zhang minghua</footer>
+
+  {# ===== 回到顶部悬浮按钮 ===== #}
+  <button id="backToTop" class="back-to-top" aria-label="回到顶部" title="回到顶部">↑</button>
+
+  {# ===== 页面级脚本（可选；支持 string 或 array；defer）===== #}
+  {% if pageJS %}
+    {% if pageJS.push %}
+      {% for src in pageJS %}
+        <script defer src="{{ src | url }}"></script>
+      {% endfor %}
+    {% else %}
+      <script defer src="{{ pageJS | url }}"></script>
+    {% endif %}
+  {% endif %}
+
+  {# ===== 滚动时给 body 加 .scrolled（用于导航压缩/阴影等）===== #}
+  <script>
+    (function () {
+      const cls = 'scrolled';
+      const onScroll = () => {
+        if (window.scrollY > 8) document.body.classList.add(cls);
+        else document.body.classList.remove(cls);
+      };
+      onScroll();
+      window.addEventListener('scroll', onScroll, { passive: true });
+    })();
+  </script>
+
+  {# ===== 回到顶部按钮逻辑 ===== #}
+  <script>
+    (function () {
+      const btn = document.getElementById('backToTop');
+      if (!btn) return;
+
+      function onScroll() {
+        // 所有页面启用；超过 1000px 显示（淡入）
+        const overThreshold = window.scrollY > 1000;
+        btn.classList.toggle('is-visible', overThreshold);
+      }
+
+      btn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+    })();
+  </script>
 </body>
 </html>
