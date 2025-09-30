@@ -10,7 +10,7 @@ backend:
 media_folder: "src/assets/Pics"   # 仓库中实际存图位置
 public_folder: "/assets/Pics"     # 页面里引用的公开路径
 
-site_url: "https://your-site-name.netlify.app" # 替换为你的Netlify域名
+site_url: "https://zmhlife.netlify.app"
 logo_url: "/assets/Pics/Ellipse 1.png"
 
 collections:

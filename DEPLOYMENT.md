@@ -29,15 +29,15 @@ git push origin main
 在Auth0应用设置中添加：
 - **Allowed Callback URLs**: 
   ```
-  https://your-site-name.netlify.app/.netlify/identity/callback
+  https://zmhlife.netlify.app/.netlify/identity/callback
   ```
 - **Allowed Logout URLs**: 
   ```
-  https://your-site-name.netlify.app/admin/
+  https://zmhlife.netlify.app/admin/
   ```
 - **Allowed Web Origins**: 
   ```
-  https://your-site-name.netlify.app
+  https://zmhlife.netlify.app
   ```
 
 ### 3. 在Netlify配置Identity
@@ -54,7 +54,7 @@ git push origin main
 ### 1. 更新 `src/admin/config.yml`
 将 `site_url` 替换为你的实际域名：
 ```yaml
-site_url: "https://your-actual-site-name.netlify.app"
+site_url: "https://zmhlife.netlify.app"
 ```
 
 ### 2. 本地开发配置
@@ -70,7 +70,7 @@ backend:
 ## 🎯 使用流程
 
 ### 生产环境
-1. 访问 `https://your-site.netlify.app/admin/`
+1. 访问 `https://zmhlife.netlify.app/admin/`
 2. 点击 "Login with Auth0"
 3. 使用Auth0账号登录
 4. 创建/编辑项目
