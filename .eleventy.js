@@ -21,12 +21,11 @@ module.exports = function (eleventyConfig) {
 
   // 把 /src/assets 原样拷贝到 /dist/assets
   eleventyConfig.addPassthroughCopy({ "src/assets": "assets" });
+  eleventyConfig.addPassthroughCopy({ "src/admin": "admin" });
+  eleventyConfig.addPassthroughCopy("public");
 
   // 正本旁的插图（放在 entries 旁边时）也允许直拷
   eleventyConfig.addPassthroughCopy("src/entries/**/*.{png,jpg,jpeg,gif,webp,svg}");
-
-  // 后台管理界面
-  eleventyConfig.addPassthroughCopy("admin");
 
 
   /* ------------------------------------------
@@ -75,30 +74,15 @@ module.exports = function (eleventyConfig) {
 
   // 图片短代码支持（使用 @11ty/eleventy-img）
   const pluginImg = require("@11ty/eleventy-img");
-  eleventyConfig.addNunjucksAsyncShortcode("image", async function (src, alt, widths = [400, 800, 1200]) {
+  eleventyConfig.addNunjucksAsyncShortcode("image", async function (src, alt, widths = [400, 800]) {
     if (!src) throw new Error("Missing image src");
-    
-    // 🔧 版权信息配置 - 请根据需要修改
-    const copyrightInfo = {
-      Creator: "Zhang Minghua",
-      "Copyright Notice": "© 2025 Zhang Minghua. All Rights Reserved. 版权所有，禁止未经许可的使用。",
-      "Rights Usage Terms": "仅限个人浏览和学习，禁止商用或修改。For personal viewing and study only. Commercial use prohibited without permission.",
-      "Contact Info": "minghua.work@gmail.com"
-    };
-    
     let metadata = await pluginImg(src, {
       widths: widths,
       formats: ["webp", "jpeg"],
       urlPath: "/img/",
-      outputDir: "./dist/img/",
-      sharpWebpOptions: { 
-        quality: 80,
-        metadata: copyrightInfo
-      },
-      sharpJpegOptions: { 
-        quality: 85,
-        metadata: copyrightInfo
-      },
+      outputDir: "./_site/img/",
+      sharpWebpOptions: { quality: 80 },
+      sharpJpegOptions: { quality: 85 },
     });
     return pluginImg.generateHTML(metadata, {
       alt,

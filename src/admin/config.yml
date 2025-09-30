@@ -1,0 +1,46 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "src/assets/Pics"
+public_folder: "/assets/Pics"
+
+collections:
+  - name: "projects"
+    label: "项目"
+    folder: "src/entries"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - {label: "标题", name: "title", widget: "string"}
+      - {label: "摘要", name: "summary", widget: "text"}
+      - {label: "封面图", name: "cover", widget: "image"}
+      - {label: "发布日期", name: "date", widget: "datetime"}
+      - label: "分类"
+        name: "categories"
+        widget: "select"
+        multiple: true
+        options: ["design", "art", "dev", "product", "startup"]
+      - label: "标签"
+        name: "tags"
+        widget: "list"
+        default: []
+      - {label: "时间周期", name: "period", widget: "string", required: false}
+      - label: "工具"
+        name: "tools"
+        widget: "list"
+        default: []
+      - {label: "客户", name: "client", widget: "string", required: false}
+      - label: "合作者"
+        name: "collaborators"
+        widget: "list"
+        default: []
+      - {label: "报酬/价格", name: "fee", widget: "string", required: false}
+      - label: "链接"
+        name: "links"
+        widget: "object"
+        fields:
+          - {label: "演示", name: "demo", widget: "string", required: false}
+          - {label: "代码仓库", name: "repo", widget: "string", required: false}
+          - {label: "文档", name: "doc", widget: "string", required: false}
+      - {label: "正文内容", name: "body", widget: "markdown"}
