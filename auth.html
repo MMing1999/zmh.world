@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>GitHub 认证中...</title>
+  <script>
+    // Decap CMS GitHub OAuth 重定向处理
+    // 将 /auth 路径重定向到 GitHub OAuth
+    var urlParams = new URLSearchParams(window.location.search);
+    var provider = urlParams.get('provider');
+    var siteId = urlParams.get('site_id');
+    var scope = urlParams.get('scope');
+    
+    if (provider === 'github') {
+      // 构建 GitHub OAuth URL
+      var githubAuthUrl = 'https://github.com/login/oauth/authorize?' + 
+        'client_id=Ov23liFESFb3Ul9cWPCj&' +
+        'redirect_uri=' + encodeURIComponent(window.location.origin + '/admin/') + '&' +
+        'scope=' + encodeURIComponent(scope || 'repo') + '&' +
+        'state=' + encodeURIComponent(siteId || 'zmh.life');
+      
+      // 重定向到 GitHub
+      window.location.href = githubAuthUrl;
+    } else {
+      // 如果不是 GitHub 认证，重定向到 admin
+      window.location.href = '/admin/#/';
+    }
+  </script>
+</head>
+<body>
+  <div style="text-align: center; margin-top: 50px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+    <h2>🔄 GitHub 认证中...</h2>
+    <p>正在跳转到 GitHub 登录页面...</p>
+    <p>如果页面没有自动跳转，请点击：</p>
+    <a href="/admin/#/" style="color: #007bff; text-decoration: none;">返回管理后台</a>
+  </div>
+</body>
+</html>
