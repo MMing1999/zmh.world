@@ -1,46 +1,84 @@
 backend:
+  # 本地调试可以先不配置 github，先用 local_backend（见下）
+  # 部署到 Netlify 时，建议:
+  # name: git-gateway
+  # branch: main
   name: git-gateway
   branch: main
 
-media_folder: "src/assets/Pics"
-public_folder: "/assets/Pics"
+local_backend: true   # 本地开发可用 decap-server 登录
+
+media_folder: "src/assets/Pics"   # 仓库中实际存图位置
+public_folder: "/assets/Pics"     # 页面里引用的公开路径
+
+site_url: "http://localhost:8080" # 本地预览可留空或写你的域名
+logo_url: "/assets/Pics/Ellipse 1.png"
 
 collections:
-  - name: "projects"
-    label: "项目"
-    folder: "src/entries"
+  - name: "projects"               # 集合 ID
+    label: "行动库 · Projects"     # 后台左侧菜单名
+    folder: "src/entries"     # 新建的 md 文件放这里
     create: true
-    slug: "{{slug}}"
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    extension: "md"
+    format: "frontmatter"
+    preview_path: "xing/{{slug}}/" # Eleventy 构建后的预览路径
+
     fields:
-      - {label: "标题", name: "title", widget: "string"}
-      - {label: "摘要", name: "summary", widget: "text"}
-      - {label: "封面图", name: "cover", widget: "image"}
-      - {label: "发布日期", name: "date", widget: "datetime"}
-      - label: "分类"
+      # —— 文档基础设置（默认不显示给编辑者）——
+      - { label: "布局（固定）", name: "layout", widget: "hidden", default: "layouts/project.njk" }
+      - { label: "分区（固定）", name: "section", widget: "hidden", default: "xing" }
+      - { label: "页面样式（固定）", name: "pageCSS", widget: "hidden", default: "/assets/Css/project.css" }
+
+      # —— 封面图 —— 
+      - { label: "封面图", name: "cover", widget: "image", allow_multiple: false, required: false }
+
+      # —— 文档基本信息 —— 
+      - { label: "标题", name: "title", widget: "string" }
+      - { label: "摘要（用于卡片/SEO）", name: "summary", widget: "text", required: false }
+      - { label: "发布日期", name: "date", widget: "datetime", format: "YYYY-MM-DD", time_format: false }
+
+      - label: "分类（可多选）"
         name: "categories"
         widget: "select"
         multiple: true
+        required: false
         options: ["design", "art", "dev", "product", "startup"]
-      - label: "标签"
+
+      - label: "标签（#tag）"
         name: "tags"
         widget: "list"
-        default: []
-      - {label: "时间周期", name: "period", widget: "string", required: false}
+        required: false
+        summary: "#{{fields.item}}"
+        field: { label: "tag", name: "item", widget: "string" }
+
+      # —— 可选信息（有则显示）——
+      - { label: "时间周期", name: "period", widget: "string", required: false }
+
       - label: "工具"
         name: "tools"
         widget: "list"
-        default: []
-      - {label: "客户", name: "client", widget: "string", required: false}
+        required: false
+        field: { label: "工具", name: "item", widget: "string" }
+
+      - { label: "客户", name: "client", widget: "string", required: false }
+
       - label: "合作者"
         name: "collaborators"
         widget: "list"
-        default: []
-      - {label: "报酬/价格", name: "fee", widget: "string", required: false}
-      - label: "链接"
+        required: false
+        field: { label: "合作者", name: "item", widget: "string" }
+
+      - { label: "报酬/价格", name: "fee", widget: "string", required: false }
+
+      - label: "外链"
         name: "links"
         widget: "object"
+        required: false
         fields:
-          - {label: "演示", name: "demo", widget: "string", required: false}
-          - {label: "代码仓库", name: "repo", widget: "string", required: false}
-          - {label: "文档", name: "doc", widget: "string", required: false}
-      - {label: "正文内容", name: "body", widget: "markdown"}
+          - { label: "演示 demo", name: "demo", widget: "string", required: false }
+          - { label: "仓库 repo", name: "repo", widget: "string", required: false }
+          - { label: "文档 doc",  name: "doc",  widget: "string", required: false }
+
+      # —— 正文（Markdown）——
+      - { label: "正文", name: "body", widget: "markdown" }
