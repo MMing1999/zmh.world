@@ -4,6 +4,7 @@ backend:
   branch: main
   # ✅ 使用你自己的 OAuth App
   base_url: https://zmh.life
+  auth_endpoint: auth
   # OAuth App 凭据
   client_id: Ov23liFESFb3Ul9cWPCj
   client_secret: 52b8dee32c77fbb476c5bee40edb781146d5f490
