@@ -1,0 +1,118 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>本地开发后台 - My Studio</title>
+  <style>
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+      margin: 0; 
+      padding: 20px; 
+      background: #f5f5f5; 
+    }
+    .header { 
+      background: white; 
+      padding: 20px; 
+      border-radius: 8px; 
+      margin-bottom: 20px; 
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+    }
+    .header h1 { 
+      margin: 0; 
+      color: #333; 
+      font-size: 24px;
+    }
+    .header p { 
+      margin: 8px 0 0; 
+      color: #666; 
+      font-size: 14px;
+    }
+    .status {
+      background: #fff3cd;
+      border: 1px solid #ffc107;
+      border-radius: 4px;
+      padding: 12px;
+      margin-bottom: 20px;
+      color: #856404;
+      font-size: 14px;
+    }
+    .warning {
+      background: #f8d7da;
+      border: 1px solid #dc3545;
+      border-radius: 4px;
+      padding: 12px;
+      margin-bottom: 20px;
+      color: #721c24;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🔧 本地开发后台</h1>
+    <p>无需 GitHub 认证的本地开发版本</p>
+  </div>
+  
+  <div class="warning">
+    ⚠️ <strong>注意</strong>：这是本地开发版本，数据不会保存到 GitHub。<br>
+    仅用于测试界面和功能，实际发布请使用正式版本。
+  </div>
+  
+  <div class="status">
+    ✅ 界面预览：可以查看所有编辑界面<br>
+    ✅ 功能测试：可以测试所有表单和编辑器<br>
+    ❌ 数据保存：数据不会实际保存到仓库
+  </div>
+  
+  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+  <script>
+    // 使用本地配置
+    CMS.init({
+      config: {
+        load_config_file: false,
+        backend: {
+          name: 'test-repo',
+          repo: 'test/test'
+        },
+        media_folder: 'src/assets/Pics/xing',
+        public_folder: '/assets/Pics/xing',
+        collections: [
+          {
+            name: 'xing_entries',
+            label: '行 · Doing 项目',
+            label_singular: '项目',
+            folder: 'src/entries',
+            create: true,
+            format: 'frontmatter',
+            extension: 'md',
+            slug: '{{slug}}',
+            fields: [
+              { name: 'layout', label: '布局', widget: 'hidden', default: 'layouts/project.njk' },
+              { name: 'pageCSS', label: '样式', widget: 'hidden', default: '/assets/Css/project.css' },
+              { name: 'section', label: '分区', widget: 'hidden', default: 'xing' },
+              { name: 'title', label: '项目标题', widget: 'string' },
+              { name: 'date', label: '发布日期', widget: 'datetime', format: 'YYYY-MM-DD', default: '{{now}}' },
+              { name: 'summary', label: '项目摘要', widget: 'text' },
+              { name: 'cover', label: '封面图片', widget: 'image', allow_multiple: false },
+              { name: 'categories', label: '分类', widget: 'select', multiple: true, options: ['design', 'art', 'dev', 'product', 'startup'], default: ['design'] },
+              { name: 'tags', label: '标签', widget: 'list' },
+              { name: 'period', label: '时间周期', widget: 'string', required: false },
+              { name: 'tools', label: '使用工具', widget: 'list', required: false },
+              { name: 'client', label: '客户/委托方', widget: 'string', required: false },
+              { name: 'collaborators', label: '合作者', widget: 'list', required: false },
+              { name: 'fee', label: '报酬/价格', widget: 'string', required: false },
+              { name: 'links', label: '相关链接', widget: 'object', required: false, fields: [
+                  { name: 'demo', label: '演示地址', widget: 'string', required: false },
+                  { name: 'repo', label: '代码仓库', widget: 'string', required: false },
+                  { name: 'doc', label: '文档链接', widget: 'string', required: false }
+                ] },
+              { name: 'body', label: '项目正文', widget: 'markdown' }
+            ]
+          }
+        ]
+      }
+    });
+  </script>
+</body>
+</html>

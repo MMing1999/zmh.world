@@ -1,0 +1,50 @@
+# 本地开发配置 - 无需 GitHub 认证
+backend:
+  name: test-repo
+  repo: test/test
+
+# 图片存储：按分区分类
+media_folder: "src/assets/Pics/xing"
+public_folder: "/assets/Pics/xing"
+
+collections:
+  - name: "xing_entries"
+    label: "行 · Doing 项目"
+    label_singular: "项目"
+    folder: "src/entries"
+    create: true
+    format: "frontmatter"
+    extension: "md"
+    slug: "{{slug}}"
+    fields:
+      # 固定字段
+      - { name: "layout", label: "布局", widget: "hidden", default: "layouts/project.njk" }
+      - { name: "pageCSS", label: "样式", widget: "hidden", default: "/assets/Css/project.css" }
+      - { name: "section", label: "分区", widget: "hidden", default: "xing" }
+      
+      # 基础信息
+      - { name: "title", label: "项目标题", widget: "string", hint: "例如：我的个人网站 v2" }
+      - { name: "date", label: "发布日期", widget: "datetime", format: "YYYY-MM-DD", default: "{{now}}" }
+      - { name: "summary", label: "项目摘要", widget: "text", hint: "一句话描述项目亮点" }
+      - { name: "cover", label: "封面图片", widget: "image", allow_multiple: false, hint: "拖拽或选择封面图，建议 1200x630px" }
+      
+      # 分类标签
+      - { name: "categories", label: "分类", widget: "select", multiple: true, options: ["design", "art", "dev", "product", "startup"], default: ["design"] }
+      - { name: "tags", label: "标签", widget: "list", hint: "例如：portfolio, eleventy, brand" }
+      
+      # 项目详情（可选）
+      - { name: "period", label: "时间周期", widget: "string", required: false, hint: "例如：2025.08 – 2025.09" }
+      - { name: "tools", label: "使用工具", widget: "list", required: false, hint: "例如：Figma, Eleventy, GitHub Pages" }
+      - { name: "client", label: "客户/委托方", widget: "string", required: false }
+      - { name: "collaborators", label: "合作者", widget: "list", required: false, hint: "例如：@张三 - 视觉设计" }
+      - { name: "fee", label: "报酬/价格", widget: "string", required: false }
+      
+      # 链接
+      - { name: "links", label: "相关链接", widget: "object", required: false, fields: [
+          { name: "demo", label: "演示地址", widget: "string", required: false, hint: "https://example.com" },
+          { name: "repo", label: "代码仓库", widget: "string", required: false, hint: "https://github.com/user/repo" },
+          { name: "doc", label: "文档链接", widget: "string", required: false, hint: "https://notion.so/..." }
+        ] }
+      
+      # 正文内容
+      - { name: "body", label: "项目正文", widget: "markdown", hint: "支持 Markdown 语法，图片可拖拽插入" }
