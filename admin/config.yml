@@ -6,7 +6,7 @@ backend:
   base_url: https://zmh.life
   # OAuth App 凭据
   client_id: Ov23liFESFb3Ul9cWPCj
-  client_secret: 539255d2abac11f5d9106ed9600f98d7450229e8
+  client_secret: 52b8dee32c77fbb476c5bee40edb781146d5f490
 
 # 图片存储：按分区分类
 media_folder: "src/assets/Pics/xing"
