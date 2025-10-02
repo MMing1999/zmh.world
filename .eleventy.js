@@ -63,6 +63,17 @@ module.exports = function (eleventyConfig) {
     // 可选依赖，没装也不影响
   }
 
+  // Markdown 渲染过滤器
+  const markdownIt = require("markdown-it");
+  const md = new markdownIt({
+    html: true,
+    breaks: true,
+    linkify: true
+  });
+  eleventyConfig.addFilter("markdown", (content) => {
+    return md.render(content || "");
+  });
+
 
   /* ------------------------------------------
    * 3) 插件安装与配置
@@ -146,7 +157,6 @@ module.exports = function (eleventyConfig) {
     },
     // 模板引擎
     htmlTemplateEngine: "njk",
-    markdownTemplateEngine: "njk",
 
     // 站点前缀（自定义域名保持 "/"）
     pathPrefix: "/",
