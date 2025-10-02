@@ -6,16 +6,23 @@
    0) 页面全局
 --------------------------------- */
 body[data-section="xing"] main.page-wrap {
+  max-width: 1400px;
+  width: 80%; /* 左右各留10%边距 */
+  margin: 0 auto;
   margin-top: 0;
   padding-top: 0;
 }
 
-/* 卡片网格容器宽度限制 - 仅电脑端 */
-@media (min-width: 1200px) {
-  .xing-card-grid {
-    max-width: 1400px;
-    margin-left: auto;
-    margin-right: auto;
+/* 响应式设计：在小屏幕上调整边距 */
+@media (max-width: 768px) {
+  body[data-section="xing"] main.page-wrap {
+    width: 90%; /* 移动设备上减少边距到5% */
+  }
+}
+
+@media (max-width: 480px) {
+  body[data-section="xing"] main.page-wrap {
+    width: 95%; /* 小屏幕设备上进一步减少边距 */
   }
 }
 
@@ -81,7 +88,7 @@ body[data-section="xing"] main.page-wrap {
   padding: 28px 0;
 }
 .xing-intro .wrap {
-  max-width: 1000px;
+  max-width: 100%;
   margin: 0 auto;
   padding: 0 16px;
 }
@@ -128,7 +135,7 @@ body[data-section="xing"] main.page-wrap {
 /* --------------------------------
    5) 分类 TagBar
 --------------------------------- */
-.xing-filter { max-width: 1000px; margin: 0 auto; }
+.xing-filter { max-width: 100%; margin: 0 auto; }
 .xing-filter__list {
   list-style: none;
   display: flex;
