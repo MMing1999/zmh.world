@@ -10,6 +10,15 @@ body[data-section="xing"] main.page-wrap {
   padding-top: 0;
 }
 
+/* 卡片网格容器宽度限制 - 仅电脑端 */
+@media (min-width: 1200px) {
+  .xing-card-grid {
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
 /* --------------------------------
    1) HERO
 --------------------------------- */

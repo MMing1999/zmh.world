@@ -151,7 +151,7 @@ layout: layouts/base.njk
 
   {# 7) 正文内容（Markdown 渲染输出） #}
   <section class="project-body" itemprop="text">
-    {{ content | markdown | safe }}
+    {{ content | safe }}
   </section>
 
   {# 底部返回 #}
