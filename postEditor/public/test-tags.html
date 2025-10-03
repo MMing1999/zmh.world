@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>标签测试</title>
+    <style>
+        .tag-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 10px 0;
+        }
+        .tag-button-item {
+            display: inline-block;
+        }
+        .tag-button-label {
+            background: #f0f0f0;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            border: 1px solid #ddd;
+        }
+        .tag-button-item input[type="checkbox"]:checked + .tag-button-label {
+            background: #333;
+            color: white;
+        }
+        .tag-button-item input[type="checkbox"] {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>标签功能测试</h1>
+    
+    <div class="tag-buttons" id="tagButtons">
+        <!-- 标签将在这里动态生成 -->
+    </div>
+    
+    <button onclick="testTags()">测试标签收集</button>
+    <div id="result"></div>
+
+    <script>
+        // 初始化标签
+        function initTags() {
+            const container = document.getElementById('tagButtons');
+            const sampleTags = ['创业', '品牌', '设计', '开发', '产品', '测试'];
+            
+            sampleTags.forEach(tag => {
+                const tagItem = document.createElement('label');
+                tagItem.className = 'tag-button-item';
+                tagItem.innerHTML = `
+                    <input type="checkbox" name="tags" value="${tag}">
+                    <span class="tag-button-label">${tag}</span>
+                `;
+                container.appendChild(tagItem);
+            });
+        }
+        
+        function testTags() {
+            const checkedTags = Array.from(document.querySelectorAll('input[name="tags"]:checked'))
+                .map(input => input.value);
+            
+            console.log('选中的标签:', checkedTags);
+            document.getElementById('result').innerHTML = 
+                '<h3>选中的标签:</h3><p>' + checkedTags.join(', ') + '</p>';
+        }
+        
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', initTags);
+    </script>
+</body>
+</html>
+
