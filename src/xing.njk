@@ -67,35 +67,38 @@ pageCSS: '/assets/Css/xing.css'
 </section>
 
 {# ===============================
-   ④ 搜索框（居中）
+   ④ 搜索框和分类标签（同一行）
    =============================== #}
-<section class="xing-searchbar">
-  <input id="xingSearch" type="search" placeholder="搜索项目…">
-</section>
-
-{# ===============================
-   ⑤ 分类 TagBar（居中）
-   =============================== #}
-<section class="xing-filter" aria-label="分类切换">
-  {% set keys = [
-    {key:"all",     label:"全部"},
-    {key:"design",  label:"设计"},
-    {key:"art",     label:"艺术"},
-    {key:"dev",     label:"开发"},
-    {key:"product", label:"产品"},
-    {key:"startup", label:"创业"}
-  ] %}
-  <ul class="xing-filter__list">
-    {% for k in keys %}
-      <li>
-        <button
-          class="xing-filter__btn{% if k.key == 'all' %} is-active{% endif %}"
-          data-key="{{ k.key }}"
-          type="button"
-        >{{ k.label }}</button>
-      </li>
-    {% endfor %}
-  </ul>
+<section class="xing-controls" aria-label="搜索和分类">
+  <div class="xing-controls__container">
+    {# 分类标签（左侧） #}
+    <div class="xing-filter" aria-label="分类切换">
+      {% set keys = [
+        {key:"all",     label:"全部"},
+        {key:"design",  label:"设计"},
+        {key:"art",     label:"艺术"},
+        {key:"dev",     label:"开发"},
+        {key:"product", label:"产品"},
+        {key:"startup", label:"创业"}
+      ] %}
+      <ul class="xing-filter__list">
+        {% for k in keys %}
+          <li>
+            <button
+              class="xing-filter__btn{% if k.key == 'all' %} is-active{% endif %}"
+              data-key="{{ k.key }}"
+              type="button"
+            >{{ k.label }}</button>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+    
+    {# 搜索框（右侧） #}
+    <div class="xing-searchbar">
+      <input id="xingSearch" type="search" placeholder="搜索项目…">
+    </div>
+  </div>
 </section>
 
 {# ===============================

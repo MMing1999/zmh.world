@@ -3,28 +3,8 @@
    =============================== */
 
 /* --------------------------------
-   0) 页面全局
+   0) 页面全局（布局已移至全局样式）
 --------------------------------- */
-body[data-section="xing"] main.page-wrap {
-  max-width: 1400px;
-  width: 80%; /* 左右各留10%边距 */
-  margin: 0 auto;
-  margin-top: 0;
-  padding-top: 0;
-}
-
-/* 响应式设计：在小屏幕上调整边距 */
-@media (max-width: 768px) {
-  body[data-section="xing"] main.page-wrap {
-    width: 90%; /* 移动设备上减少边距到5% */
-  }
-}
-
-@media (max-width: 480px) {
-  body[data-section="xing"] main.page-wrap {
-    width: 95%; /* 小屏幕设备上进一步减少边距 */
-  }
-}
 
 /* --------------------------------
    1) HERO
@@ -109,53 +89,137 @@ body[data-section="xing"] main.page-wrap {
 }
 
 /* --------------------------------
-   4) 搜索框
+   4) 搜索框和分类标签（同一行布局）
 --------------------------------- */
-.xing-searchbar {
-  text-align: center;
+.xing-controls {
   margin: 20px auto;
-}
-.xing-searchbar input[type="search"] {
-  appearance: none;
-  border: 1px solid #000;
-  background: #fff;
-  color: #000;
-  padding: 8px 12px;
-  border-radius: 12px;
-  font: inherit;
-  width: 240px;
-  max-width: 90%;
-  text-align: center;
-}
-.xing-searchbar input[type="search"]:focus {
-  outline: none;
-  background: #f8f8f8;
+  max-width: 100%;
 }
 
-/* --------------------------------
-   5) 分类 TagBar
---------------------------------- */
-.xing-filter { max-width: 100%; margin: 0 auto; }
+.xing-controls__container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding: 0 16px;
+}
+
+/* 分类标签（左侧） */
+.xing-filter {
+  flex: 1;
+}
+
 .xing-filter__list {
   list-style: none;
   display: flex;
   gap: 12px;
-  justify-content: center;
   flex-wrap: wrap;
   padding: 0;
+  margin: 0;
 }
+
 .xing-filter__btn {
   appearance: none;
   font: inherit;
   cursor: pointer;
-  border: 1px solid #000;
-  background: #fff;
+  border: none;
+  background: transparent;
   color: #000;
-  border-radius: 6px;
-  padding: 6px 12px;
+  padding: 8px 0;
+  white-space: nowrap;
+  position: relative;
+  transition: all 0.2s ease;
 }
-.xing-filter__btn:hover { background: #eaeaea; }
-.xing-filter__btn.is-active { background: #000; color: #fff; }
+
+.xing-filter__btn:hover { 
+  opacity: 0.7; 
+}
+
+.xing-filter__btn.is-active { 
+  color: #000; 
+}
+
+.xing-filter__btn.is-active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #000;
+  border-radius: 1px;
+}
+
+/* 搜索框（右侧） */
+.xing-searchbar {
+  flex-shrink: 0;
+  position: relative;
+}
+
+.xing-searchbar input[type="search"] {
+  appearance: none;
+  border: none;
+  border-bottom: 1px solid #000;
+  background: transparent;
+  color: #000;
+  padding: 8px 0;
+  font: inherit;
+  width: 240px;
+  text-align: left;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.xing-searchbar input[type="search"]:focus {
+  border-bottom-color: #000;
+}
+
+.xing-searchbar input[type="search"]::placeholder {
+  color: #999;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .xing-controls__container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+  
+  .xing-filter {
+    order: 2;
+  }
+  
+  .xing-searchbar {
+    order: 1;
+    align-self: center;
+  }
+  
+  .xing-filter__list {
+    justify-content: center;
+  }
+  
+  .xing-searchbar input[type="search"] {
+    width: 100%;
+    max-width: 300px;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .xing-controls__container {
+    padding: 0 12px;
+  }
+  
+  .xing-filter__list {
+    gap: 8px;
+  }
+  
+  .xing-filter__btn {
+    padding: 4px 8px;
+    font-size: 14px;
+  }
+}
 
 /* --------------------------------
    6) 卡片网格
@@ -163,14 +227,27 @@ body[data-section="xing"] main.page-wrap {
 .xing-card-grid {
   list-style: none;
   margin: 20px 0;
-  padding: 0;
+  padding: 0 16px;
   display: grid;
   gap: 20px;
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
-@media (max-width: 1200px) { .xing-card-grid { grid-template-columns: repeat(3, 1fr); } }
-@media (max-width: 840px)  { .xing-card-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 520px)  { .xing-card-grid { grid-template-columns: 1fr; } }
+@media (max-width: 1200px) { 
+  .xing-card-grid { 
+    grid-template-columns: repeat(3, 1fr); 
+  } 
+}
+@media (max-width: 840px) { 
+  .xing-card-grid { 
+    grid-template-columns: repeat(2, 1fr); 
+  } 
+}
+@media (max-width: 520px) { 
+  .xing-card-grid { 
+    grid-template-columns: 1fr; 
+    padding: 0 12px;
+  } 
+}
 
 /* ==========================================
    7) 卡片视觉 + 固定高度/折叠（新增整合）
@@ -240,6 +317,7 @@ body[data-section="xing"] main.page-wrap {
 
   display: -webkit-box;
   -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
   overflow: hidden;
 }
 
@@ -252,6 +330,7 @@ body[data-section="xing"] main.page-wrap {
 
   display: -webkit-box;
   -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
   overflow: hidden;
 }
 
