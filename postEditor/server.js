@@ -61,8 +61,8 @@ async function ensureDirectories() {
 // 图片处理配置
 const MAX_FILE_SIZE_MB = 2;
 const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
-const MAX_WIDTH = 1920;
-const MAX_HEIGHT = 1920;
+const MAX_WIDTH = 1920;  // 16:9 比例
+const MAX_HEIGHT = 1080; // 16:9 比例
 
 // 版权信息
 const COPYRIGHT_INFO = {
@@ -515,52 +515,6 @@ app.post('/api/upload-image', upload.single('image'), async (req, res) => {
   }
 });
 
-// 保存为草稿
-app.post('/api/save-draft', async (req, res) => {
-  try {
-    const { section, fileName, content, title } = req.body;
-    
-    if (!section || !fileName || !content) {
-      return res.status(400).json({ error: '缺少必要参数' });
-    }
-
-    const filePath = path.join(ENTRIES_PATH, section, fileName);
-    
-    // 检查文件是否存在
-    if (!await fs.pathExists(filePath)) {
-      return res.status(404).json({ error: '项目文件不存在，请先创建项目' });
-    }
-
-    // 读取现有文件内容
-    const existingContent = await fs.readFile(filePath, 'utf8');
-    
-    // 解析front matter
-    const frontmatterMatch = existingContent.match(/^---\n([\s\S]*?)\n---/);
-    if (!frontmatterMatch) {
-      return res.status(400).json({ error: '文件格式错误' });
-    }
-    
-    const frontmatter = frontmatterMatch[1];
-    
-    // 处理内容中的图片上传
-    const processedContent = await processImagesInContent(content, section, title);
-    
-    // 重新组合文件内容
-    const newContent = `---\n${frontmatter}\n---\n\n${processedContent}`;
-    
-    // 写入文件
-    await fs.writeFile(filePath, newContent, 'utf8');
-
-    res.json({ 
-      success: true, 
-      message: '草稿保存成功',
-      filePath: filePath
-    });
-
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
 
 // 保存文章API - 覆盖保存到原文件
 app.post('/api/save-article', async (req, res) => {
@@ -669,63 +623,9 @@ app.post('/api/publish-content', async (req, res) => {
     await fs.writeFile(filePath, newContent, 'utf8');
 
     // 提交到GitHub
-    const git = simpleGit(CODING_PATH);
-    
-    // 添加Markdown文件和相关的图片文件
-    await git.add(filePath);
-    
-    // 添加Pics目录下的所有新文件
-    const picsDir = path.join(PICS_PATH, section);
-    if (await fs.pathExists(picsDir)) {
-      await git.add(picsDir);
-    }
-    
-    // 提交
     const timestamp = new Date().toLocaleString('zh-CN');
     const commitMessage = `发布项目: ${title} - ${timestamp}`;
-    await git.commit(commitMessage);
-    
-    // 推送
-    console.log('开始推送到GitHub...');
-    
-    // 添加重试机制
-    let pushSuccess = false;
-    let lastError = null;
-    
-    for (let attempt = 1; attempt <= 3; attempt++) {
-      try {
-        console.log(`推送尝试 ${attempt}/3...`);
-        
-        const pushPromise = git.push('origin', 'main').catch(async () => {
-          // 如果main分支不存在，尝试master分支
-          console.log('main分支推送失败，尝试master分支...');
-          return await git.push('origin', 'master');
-        });
-        
-        // 减少超时时间到15秒
-        const timeoutPromise = new Promise((_, reject) => {
-          setTimeout(() => reject(new Error('GitHub推送超时')), 15000);
-        });
-        
-        await Promise.race([pushPromise, timeoutPromise]);
-        console.log('GitHub推送成功');
-        pushSuccess = true;
-        break;
-        
-      } catch (error) {
-        lastError = error;
-        console.log(`推送尝试 ${attempt} 失败:`, error.message);
-        
-        if (attempt < 3) {
-          console.log('等待2秒后重试...');
-          await new Promise(resolve => setTimeout(resolve, 2000));
-        }
-      }
-    }
-    
-    if (!pushSuccess) {
-      throw new Error(`GitHub推送失败 (3次尝试): ${lastError.message}`);
-    }
+    await pushToGitHub(commitMessage);
 
     res.json({ 
       success: true, 
@@ -737,6 +637,61 @@ app.post('/api/publish-content', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+// Git推送函数
+async function pushToGitHub(commitMessage) {
+  const git = simpleGit(CODING_PATH);
+  
+  // 添加所有更改
+  await git.add('.');
+  
+  // 提交
+  const timestamp = new Date().toLocaleString('zh-CN');
+  const finalCommitMessage = commitMessage || `更新项目内容 - ${timestamp}`;
+  await git.commit(finalCommitMessage);
+  
+  // 推送
+  console.log('开始推送到GitHub...');
+  
+  // 添加重试机制
+  let pushSuccess = false;
+  let lastError = null;
+  
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    try {
+      console.log(`推送尝试 ${attempt}/3...`);
+      
+      const pushPromise = git.push('origin', 'main').catch(async () => {
+        // 如果main分支不存在，尝试master分支
+        console.log('main分支推送失败，尝试master分支...');
+        return await git.push('origin', 'master');
+      });
+      
+      // 减少超时时间到15秒
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('GitHub推送超时')), 15000);
+      });
+      
+      await Promise.race([pushPromise, timeoutPromise]);
+      console.log('GitHub推送成功');
+      pushSuccess = true;
+      break;
+      
+    } catch (error) {
+      lastError = error;
+      console.log(`推送尝试 ${attempt} 失败:`, error.message);
+      
+      if (attempt < 3) {
+        console.log('等待2秒后重试...');
+        await new Promise(resolve => setTimeout(resolve, 2000));
+      }
+    }
+  }
+  
+  if (!pushSuccess) {
+    throw new Error(`GitHub推送失败 (3次尝试): ${lastError.message}`);
+  }
+}
 
 // 处理内容中的图片
 async function processImagesInContent(content, section, title) {
@@ -812,55 +767,8 @@ app.post('/api/deploy', async (req, res) => {
       return res.json({ success: true, message: '没有检测到任何更改' });
     }
 
-    // 添加所有更改
-    await git.add('.');
-    
-    // 提交
-    const timestamp = new Date().toLocaleString('zh-CN');
-    const commitMessage = `更新项目内容 - ${timestamp}`;
-    await git.commit(commitMessage);
-    
-    // 推送
-    console.log('开始推送到GitHub...');
-    
-    // 添加重试机制
-    let pushSuccess = false;
-    let lastError = null;
-    
-    for (let attempt = 1; attempt <= 3; attempt++) {
-      try {
-        console.log(`推送尝试 ${attempt}/3...`);
-        
-        const pushPromise = git.push('origin', 'main').catch(async () => {
-          // 如果main分支不存在，尝试master分支
-          console.log('main分支推送失败，尝试master分支...');
-          return await git.push('origin', 'master');
-        });
-        
-        // 减少超时时间到15秒
-        const timeoutPromise = new Promise((_, reject) => {
-          setTimeout(() => reject(new Error('GitHub推送超时')), 15000);
-        });
-        
-        await Promise.race([pushPromise, timeoutPromise]);
-        console.log('GitHub推送成功');
-        pushSuccess = true;
-        break;
-        
-      } catch (error) {
-        lastError = error;
-        console.log(`推送尝试 ${attempt} 失败:`, error.message);
-        
-        if (attempt < 3) {
-          console.log('等待2秒后重试...');
-          await new Promise(resolve => setTimeout(resolve, 2000));
-        }
-      }
-    }
-    
-    if (!pushSuccess) {
-      throw new Error(`GitHub推送失败 (3次尝试): ${lastError.message}`);
-    }
+    // 使用公共推送函数
+    await pushToGitHub();
 
     res.json({ success: true, message: '成功部署到GitHub！' });
 
