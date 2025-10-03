@@ -3,7 +3,7 @@ section: xing
 layout: layouts/project.njk
 pageCSS: /assets/Css/project.css
 title: "t-project预览"
-summary: 这个文件是project的模版文件，用于以后所有项目的基础版式格式。
+summary: 这个文件是project的模版文件，用于以后所有项目的基础版式格式。这个文件是project的模版文件，用于以后所有项目的基础版式格式。这个文件是project的模版文件，用于以后所有项目的基础版式格式。
 date: 2025-09-27
 
 cover: /assets/Pics/xing-portfolo-03-temp.jpg

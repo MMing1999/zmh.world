@@ -46,7 +46,14 @@ layout: layouts/base.njk
         <span class="label">分类:</span>
         <span class="value">
           {% for c in categories %}
-            <span class="chip">{{ c }}</span>
+            {% set categoryMap = {
+              "design": "设计",
+              "art": "艺术", 
+              "dev": "开发",
+              "product": "产品",
+              "startup": "创业"
+            } %}
+            <span class="chip">{{ categoryMap[c] or c }}</span>
           {% endfor %}
         </span>
       </div>

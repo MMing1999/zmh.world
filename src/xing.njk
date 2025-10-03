@@ -7,57 +7,53 @@ pageCSS: '/assets/Css/xing.css'
 ---
 
 {# ===============================
-   ① HERO：满屏出血 + 高度 700 + 裁切填充
+   ① HERO：图片展示 + Intro
    =============================== #}
-<section class="xing-hero">
-  <div class="inner">
-    <div class="slides" id="xingSlides">
-      {# slide 1 #}
-      <a class="slide is-active" href="https://example-portfolio-1.com" target="_blank" rel="noopener">
+<div class="xing-hero-container">
+  <section class="xing-hero">
+    <div class="hero-images">
+      <div class="hero-pic-1">
         <img src="{{ '/assets/Pics/xing-portfolo-01-temp.jpg' | url }}" alt="Portfolio 1">
-        <div class="caption">
+        <div class="hero-caption">
           <h2>Portfolio 1</h2>
           <p>作品集描述：一句话概述/主打亮点。这里会链接到更炫的外部 portfolio 站。</p>
         </div>
-      </a>
+      </div>
 
-      {# slide 2 #}
-      <a class="slide" href="https://example-portfolio-2.com" target="_blank" rel="noopener">
+      <div class="hero-pic-2">
         <img src="{{ '/assets/Pics/xing-portfolo-02-temp.jpg' | url }}" alt="Portfolio 2">
-        <div class="caption">
+        <div class="hero-caption">
           <h2>Portfolio 2</h2>
           <p>第二组封面与描述（点击底部条切换）。</p>
         </div>
-      </a>
+      </div>
 
-      {# slide 3 #}
-      <a class="slide" href="https://example-portfolio-3.com" target="_blank" rel="noopener">
+      <div class="hero-pic-3">
         <img src="{{ '/assets/Pics/xing-portfolo-03-temp.jpg' | url }}" alt="Portfolio 3">
-        <div class="caption">
+        <div class="hero-caption">
           <h2>Portfolio 3</h2>
           <p>第三组封面与描述。</p>
         </div>
-      </a>
-    </div>
+      </div>
 
-    {# 切换按钮 #}
-    <div class="controls" id="xingControls" aria-label="切换作品封面">
-      <button class="dot is-active" aria-label="封面 1"></button>
-      <button class="dot" aria-label="封面 2"></button>
-      <button class="dot" aria-label="封面 3"></button>
+      <div class="hero-pic-4">
+        <img src="{{ '/assets/Pics/xing/xing-portfolo-04-temp.jpg' | url }}" alt="Portfolio 4">
+        <div class="hero-caption">
+          <h2>Portfolio 4</h2>
+          <p>第四组封面与描述。</p>
+        </div>
+      </div>
     </div>
-  </div>
-</section>
-
-{# ===============================
-   ② Intro 灰条
-   =============================== #}
-<section class="xing-intro">
-  <div class="wrap">
-    <h1>行 · Doing</h1>
-    <p>这里展示一些真实或虚构项目的记录。下面是分组标签（TagBar）与项目卡片画廊。</p>
-  </div>
-</section>
+    
+    {# Intro 部分 #}
+    <div class="hero-intro">
+      <div class="wrap">
+        <h1>行 · Doing</h1>
+        <p class="xing-title__description">这里展示一些真实或虚构项目的记录。下面是分组标签（TagBar）与项目卡片画廊。</p>
+      </div>
+    </div>
+  </section>
+</div>
 
 {# ===============================
    ③ 标题（居中）
@@ -126,7 +122,35 @@ pageCSS: '/assets/Css/xing.css'
         data-date="{{ p.date | fmtDate }}">
       <a class="xing-card__link" href="{{ p.url }}">
 
-        {# —— 封面：容器（固定比例），图片绝对定位铺满 —— #}
+        {# —— 顶部：日期 + 标题 —— #}
+        <div class="xing-card__header">
+          <div class="xing-card__date" data-date="{{ p.date | fmtDate }}">
+            <span class="xing-card__date-year"></span>
+            <span class="xing-card__date-separator"></span>
+            <span class="xing-card__date-month"></span>
+            <span class="xing-card__date-day-separator"></span>
+            <span class="xing-card__date-day"></span>
+          </div>
+          <h4 class="xing-card__title">{{ p.data.title }}</h4>
+        </div>
+
+        {# —— 分类标签 —— #}
+        {% if p.data.categories %}
+          <div class="xing-card__categories">
+            {% for c in p.data.categories %}
+              {% set key = (c | lower) %}
+              {% set label = c %}
+              {% if key == 'design'  %}{% set label = '设计'  %}{% endif %}
+              {% if key == 'art'     %}{% set label = '艺术'  %}{% endif %}
+              {% if key == 'dev'     %}{% set label = '开发'  %}{% endif %}
+              {% if key == 'product' %}{% set label = '产品'  %}{% endif %}
+              {% if key == 'startup' %}{% set label = '创业'  %}{% endif %}
+              <span class="xing-card__category">{{ label }}</span>
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        {# —— 封面图片 —— #}
         {% set coverSrc = p.data.cover %}
         <div class="xing-card__media">
           <img class="xing-card__cover"
@@ -134,17 +158,9 @@ pageCSS: '/assets/Css/xing.css'
                alt="">
         </div>
 
-        {# —— 文案区 —— #}
-        <div class="xing-card__body">
-          {# 标题 #}
-          <h4 class="xing-card__title">{{ p.data.title }}</h4>
-
-          {# 摘要（可选） #}
-          {% if p.data.summary %}
-            <p class="xing-card__summary">{{ p.data.summary }}</p>
-          {% endif %}
-
-          {# 标签（最多 4 个） #}
+        {# —— 底部：标签 + 简介 —— #}
+        <div class="xing-card__footer">
+          {# 标签 #}
           {% if p.data.tags %}
             <div class="xing-card__tags">
               {% for t in p.data.tags %}
@@ -153,24 +169,10 @@ pageCSS: '/assets/Css/xing.css'
             </div>
           {% endif %}
 
-          {# --- 卡片底部：时间 + 多分类徽章 --- #}
-          <div class="xing-card__footer">
-            <time>{{ p.date | fmtDate }}</time>
-
-            <div class="xing-card__cats">
-              {# 如果 categories 为空就不渲染 #}
-              {% for c in (p.data.categories or []) %}
-                {% set key = (c | lower) %}
-                {% set label = c %}
-                {% if key == 'design'  %}{% set label = '设计'  %}{% endif %}
-                {% if key == 'art'     %}{% set label = '艺术'  %}{% endif %}
-                {% if key == 'dev'     %}{% set label = '开发'  %}{% endif %}
-                {% if key == 'product' %}{% set label = '产品'  %}{% endif %}
-                {% if key == 'startup' %}{% set label = '创业'  %}{% endif %}
-                <span class="badge badge--cat">{{ label }}</span>
-              {% endfor %}
-            </div>
-          </div>
+          {# 简介 #}
+          {% if p.data.summary %}
+            <p class="xing-card__summary">{{ p.data.summary }}</p>
+          {% endif %}
         </div>
       </a>
     </li>
@@ -191,6 +193,28 @@ pageCSS: '/assets/Css/xing.css'
     const search = document.getElementById('xingSearch');
 
     let currentKey = 'all';
+
+    // 处理日期显示
+    function formatDates() {
+      const dateElements = document.querySelectorAll('.xing-card__date');
+      dateElements.forEach(dateEl => {
+        const fullDate = dateEl.dataset.date;
+        if (fullDate) {
+          const parts = fullDate.split('-');
+          const year = parts[0];
+          const month = parts[1];
+          const day = parts[2];
+          
+          const yearEl = dateEl.querySelector('.xing-card__date-year');
+          const monthEl = dateEl.querySelector('.xing-card__date-month');
+          const dayEl = dateEl.querySelector('.xing-card__date-day');
+          
+          if (yearEl) yearEl.textContent = year;
+          if (monthEl) monthEl.textContent = month;
+          if (dayEl) dayEl.textContent = day;
+        }
+      });
+    }
 
     // 是否匹配某个卡片
     function matchCard(li, key, q) {
@@ -221,6 +245,9 @@ pageCSS: '/assets/Css/xing.css'
 
     // 初始：显示全部
     apply();
+    
+    // 格式化日期显示
+    formatDates();
   })();
 </script>
 

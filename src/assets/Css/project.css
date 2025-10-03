@@ -16,13 +16,19 @@ body[data-section="xing"] .project {
 /* -------- 2) 顶部封面 -------- */
 body[data-section="xing"] .project-hero {
   margin: 0 0 20px !important;
+  position: relative !important;
+  width: 100% !important;
+  aspect-ratio: 16 / 9 !important;
+  overflow: hidden !important;
+  border-radius: 12px !important;
 }
 body[data-section="xing"] .project-hero img {
-  display: block !important;
+  position: absolute !important;
+  inset: 0 !important;
   width: 100% !important;
-  height: auto !important;
-  border-radius: 12px !important;
+  height: 100% !important;
   object-fit: cover !important;
+  display: block !important;
 }
 
 /* -------- 3) 标题与基础信息 -------- */
