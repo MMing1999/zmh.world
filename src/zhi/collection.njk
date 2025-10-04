@@ -1,0 +1,74 @@
+---
+title: Collection · 收集
+layout: layouts/base.njk
+section: zhi
+pageCSS: /assets/Css/zhi.css
+permalink: /zhi/collection/
+---
+起·心·动·念
+
+<div class="collection-content">
+  <!-- 全局按钮组 -->
+  <div class="part1-btn">
+    <button class="tab-button active" data-tab="ideas">想法</button>
+    <span class="tab-separator">/</span>
+    <button class="tab-button" data-tab="questions">问题</button>
+  </div>
+
+  <!-- 想法内容 -->
+  <div class="tab-content active" id="ideas-content">
+    {% if notionData.ideas.length > 0 %}
+    {% for idea in notionData.ideas %}
+    <div class="part2-notion">
+      <div class="part2-notion-time">{{ idea.created }}</div>
+      <div class="part2-notion-text">{{ idea.title }}</div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div class="empty-state">
+      <p>暂无想法记录，<a href="https://www.notion.so/28199b0e1a8180739633d177c1bbff6b?v=28199b0e1a8180c3849a000cf151dde4&source=copy_link" target="_blank">点击这里</a>添加新想法。</p>
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- 问题内容 -->
+  <div class="tab-content" id="questions-content">
+    {% if notionData.questions.length > 0 %}
+    {% for question in notionData.questions %}
+    <div class="part2-notion">
+      <div class="part2-notion-time">{{ question.created }}</div>
+      <div class="part2-notion-text">{{ question.title }}</div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div class="empty-state">
+      <p>暂无问题记录，<a href="https://www.notion.so/28199b0e1a8180539adaf3fa23a4bdce?v=28199b0e1a8180f1a121000ccb6b80ad&source=copy_link" target="_blank">点击这里</a>添加新问题。</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const tabButtons = document.querySelectorAll('.tab-button');
+  const tabContents = document.querySelectorAll('.tab-content');
+
+  tabButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      const targetTab = this.getAttribute('data-tab');
+      
+      // 移除所有活动状态
+      tabButtons.forEach(btn => btn.classList.remove('active'));
+      tabContents.forEach(content => content.classList.remove('active'));
+      
+      // 添加当前活动状态
+      this.classList.add('active');
+      const targetContent = document.getElementById(targetTab + '-content');
+      if (targetContent) {
+        targetContent.classList.add('active');
+      }
+    });
+  });
+});
+</script>
+
