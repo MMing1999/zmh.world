@@ -7,64 +7,69 @@ pageCSS: '/assets/Css/xing.css'
 ---
 
 {# ===============================
-   ① HERO：图片展示 + Intro
+   ① HERO：图片展示（全宽section，突破1400px限制）
    =============================== #}
-<div class="xing-hero-container">
-  <section class="xing-hero">
-    <div class="hero-images">
-      <div class="hero-pic-1">
-        <img src="{{ '/assets/Pics/xing-portfolo-01-temp.jpg' | url }}" alt="Portfolio 1">
-        <div class="hero-caption">
-          <h2>Portfolio 1</h2>
-          <p>作品集描述：一句话概述/主打亮点。这里会链接到更炫的外部 portfolio 站。</p>
+<section class="xing-hero-fullwidth">
+  <div class="xing-hero-container">
+    <div class="xing-hero">
+      <div class="hero-images">
+        <div class="hero-pic-1">
+          <img src="{{ '/assets/Pics/xing-portfolo-01-temp.jpg' | url }}" alt="Portfolio 1">
+          <div class="hero-caption">
+            <h2>Portfolio 1</h2>
+            <p>作品集描述：一句话概述/主打亮点。这里会链接到更炫的外部 portfolio 站。</p>
+          </div>
         </div>
-      </div>
 
-      <div class="hero-pic-2">
-        <img src="{{ '/assets/Pics/xing-portfolo-02-temp.jpg' | url }}" alt="Portfolio 2">
-        <div class="hero-caption">
-          <h2>Portfolio 2</h2>
-          <p>第二组封面与描述（点击底部条切换）。</p>
+        <div class="hero-pic-2">
+          <img src="{{ '/assets/Pics/xing-portfolo-02-temp.jpg' | url }}" alt="Portfolio 2">
+          <div class="hero-caption">
+            <h2>Portfolio 2</h2>
+            <p>第二组封面与描述（点击底部条切换）。</p>
+          </div>
         </div>
-      </div>
 
-      <div class="hero-pic-3">
-        <img src="{{ '/assets/Pics/xing-portfolo-03-temp.jpg' | url }}" alt="Portfolio 3">
-        <div class="hero-caption">
-          <h2>Portfolio 3</h2>
-          <p>第三组封面与描述。</p>
+        <div class="hero-pic-3">
+          <img src="{{ '/assets/Pics/xing-portfolo-03-temp.jpg' | url }}" alt="Portfolio 3">
+          <div class="hero-caption">
+            <h2>Portfolio 3</h2>
+            <p>第三组封面与描述。</p>
+          </div>
         </div>
-      </div>
 
-      <div class="hero-pic-4">
-        <img src="{{ '/assets/Pics/xing/xing-portfolo-04-temp.jpg' | url }}" alt="Portfolio 4">
-        <div class="hero-caption">
-          <h2>Portfolio 4</h2>
-          <p>第四组封面与描述。</p>
+        <div class="hero-pic-4">
+          <img src="{{ '/assets/Pics/xing/xing-portfolo-04-temp.jpg' | url }}" alt="Portfolio 4">
+          <div class="hero-caption">
+            <h2>Portfolio 4</h2>
+            <p>第四组封面与描述。</p>
+          </div>
         </div>
       </div>
     </div>
-    
-    {# Intro 部分 #}
-    <div class="hero-intro">
-      <div class="wrap">
-        <h1>行 · Doing</h1>
-        <p class="xing-title__description">这里展示一些真实或虚构项目的记录。下面是分组标签（TagBar）与项目卡片画廊。</p>
-      </div>
-    </div>
-  </section>
-</div>
-
-{# ===============================
-   ③ 标题（居中）
-   =============================== #}
-<section class="xing-title">
-  <h2>行动库</h2>
+  </div>
 </section>
 
 {# ===============================
-   ④ 搜索框和分类标签（同一行）
+   ② 页面内容（保持1400px限制）
    =============================== #}
+<div class="xing-content">
+  <div class="hero-intro">
+    <div class="wrap">
+      <h1>行 · Doing</h1>
+      <p class="xing-title__description">这里展示一些真实或虚构项目的记录。下面是分组标签（TagBar）与项目卡片画廊。</p>
+    </div>
+  </div>
+
+  {# ===============================
+     ③ 标题（居中）
+     =============================== #}
+  <section class="xing-title">
+    <h2>行动库</h2>
+  </section>
+
+  {# ===============================
+     ④ 搜索框和分类标签（同一行）
+     =============================== #}
 <section class="xing-controls" aria-label="搜索和分类">
   <div class="xing-controls__container">
     {# 分类标签（左侧） #}
@@ -272,3 +277,5 @@ pageCSS: '/assets/Css/xing.css'
     // setInterval(()=> go((i+1)%slides.length), 5000);
   })();
 </script>
+
+</div> {# 结束 xing-content 容器 #}

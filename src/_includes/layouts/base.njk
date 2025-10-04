@@ -214,8 +214,8 @@
       if (!btn) return;
 
       function onScroll() {
-        // 所有页面启用；超过 1000px 显示（淡入）
-        const overThreshold = window.scrollY > 1000;
+        // 所有页面启用；超过 300px 显示（淡入）
+        const overThreshold = window.scrollY > 300;
         btn.classList.toggle('is-visible', overThreshold);
       }
 

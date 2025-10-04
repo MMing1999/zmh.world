@@ -5,17 +5,53 @@
 /* --------------------------------
    0) 页面全局（布局已移至全局样式）
 --------------------------------- */
+html, body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+/* 页面内容容器，保持全局1400px限制 */
+.xing-content {
+  max-width: 1400px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* 响应式设计：在小屏幕上调整边距 */
+@media (max-width: 768px) {
+  .xing-content {
+    width: 90%; /* 移动设备上减少边距到5% */
+  }
+}
+
+@media (max-width: 480px) {
+  .xing-content {
+    width: 95%; /* 小屏幕设备上进一步减少边距 */
+    padding: 0 12px;
+  }
+}
 
 /* --------------------------------
-   1) HERO - 图片展示
+   1) HERO - 图片展示（全宽section）
 --------------------------------- */
-:root { 
-  --nav-height: 60px; /* 导航栏高度 */
-  --hero-h: calc(100vh - var(--nav-height)); /* 100%视窗高度减去导航栏高度 */
-  --hero-min-height: 500px; /* 桌面端最小高度 */
+
+
+/* 全宽hero section，突破main.page-wrap的1400px限制 */
+.xing-hero-fullwidth {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  margin-top: -2.2vh;
+  /* 确保突破父容器的宽度限制 */
+  max-width: none;
+  overflow-x: hidden;
 }
 
 .xing-hero-container {
+  width: 100%;
   height: var(--hero-h);
   min-height: var(--hero-min-height);
   position: relative;
@@ -30,18 +66,18 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 20px;
+  padding: 12px 20px 20px 20px; /* 顶部12px，左右20px，底部20px */
 }
 
 .hero-images {
   display: flex;
   gap: 12px;
-  max-width: 1400px;
   width: 100%;
   justify-content: center;
   align-items: stretch;
   flex: 1;
-  margin: 0 auto;
+  max-width: none;
+  box-sizing: border-box;
 }
 
 /* Hero图片样式 - 按比例设置宽度 */
@@ -111,9 +147,11 @@
 }
 
 .hero-intro .wrap {
-  max-width: 1400px;
-  margin: 0 auto;
+  width: 100%;
+  margin: 0;
   text-align: left;
+  padding: 0 12px; /* 保持与图片相同的左右间距 */
+  box-sizing: border-box;
 }
 
 .hero-intro h1 {
@@ -131,7 +169,7 @@
 }
 
 /* 响应式设计 */
-@media (max-width: 1200px) {
+@media (max-width: 1400px) {
   .hero-images {
     gap: 10px;
   }
@@ -148,6 +186,7 @@
 @media (max-width: 1024px) {
   .hero-images {
     gap: 8px;
+    padding: 0 12px; /* 保持左右12px间距 */
   }
   
   .hero-intro h1 {
@@ -177,15 +216,16 @@
   }
   
   .xing-hero {
-    padding: 15px;
+    padding: 12px 15px 15px 15px; /* 顶部12px，左右15px，底部15px */
     height: auto; /* 移动端取消固定高度 */
   }
   
   .hero-images {
     flex-direction: column;
     gap: 12px;
-    max-width: 400px;
+    width: 100%;
     flex: none; /* 移动端取消flex: 1 */
+    padding: 0 12px; /* 保持左右12px间距 */
   }
   
   .hero-pic-1,
